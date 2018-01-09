@@ -6,7 +6,12 @@ let schema = new mongoose.Schema({
   name: { type: String, required: true },
   code: { type: String, unique: true, required: true },
   // REFERENCE
-  vendor: { type: String, require: true },
+  vendor: [
+    { name: String, required: true },
+    { code: String, unique: true, required: true },
+    { email: String, unique: true, required: true },
+    { rank: Number },
+  ],
   sku: { type: String, required: true },
   price: { type: Number, default: 0, min: 1, max: 99999 },
   status: { type: String, enum: SALE_STATUS, default: 'Not-Available', required: true },

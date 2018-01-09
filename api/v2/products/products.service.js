@@ -1,4 +1,5 @@
 const ProductModel = require('./products.entity');
+const VendorModel = require('./vendor.entity');
 
 const addNewProduct = function(newProduct, done) {
   let product = new ProductModel();
@@ -46,7 +47,25 @@ const getProducts = function(done) {
 }
 
 const findProductByCode = function(productCode, done) {
-  // @TODO
+  let query = productCode;
+  let fieldOptions = null;
+  let page = 1;
+  let limit = 10;
+
+  ProductModel
+    .find(query)
+    .sort({ "addedOn": -1 })
+    .select(fieldOptions)
+    .skip((page > 0) ? limit * (page - 1) : 0)
+    .limit(limit)
+    .exec((err, colln) => {
+      if (err) {
+        console.error('Error in finding product, ERROR::', err, ' queries for ', query);
+        done(err);
+        return;
+      }
+      done(null, colln);
+    });
 }
 
 const submitNewReview = function(productCode, reviewObj, done) {

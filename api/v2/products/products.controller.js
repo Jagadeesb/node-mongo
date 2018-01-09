@@ -1,4 +1,5 @@
 const productService = require('./products.service');
+const vendorCtrl = require('./vendor/vendor.controller');
 const async = require('async');
 
 const addNewProduct = function(newProduct, done) {
@@ -16,10 +17,11 @@ const getProducts = function(done) {
 const findProductByCode = function(productCode, done) {
 	async.waterfall([
 		productService.findProductByCode.bind(null, productCode),
-		vendorCtrl.findVendorByCode
+		vendorCtrl.findVendorByCode.bind(product, productCode)
 	], (err, result) => {
-		// @TODO
-	});
+		productService.getProducts(done);
+    vendorCtrl.findVendorByCode(done);
+  });
 }
 
 module.exports = {
